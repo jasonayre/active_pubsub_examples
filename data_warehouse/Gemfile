@@ -34,7 +34,8 @@ end
 
 # gem 'active_pubsub'
 gem 'sidekiq'
-gem 'active_pubsub', :path => "~/gems/active_pubsub"
+gem 'active_pubsub'
+# gem 'active_pubsub', :path => "~/gems/active_pubsub"
 gem 'pry'
 
 # Use ActiveModel has_secure_password

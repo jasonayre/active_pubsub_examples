@@ -1,12 +1,3 @@
-PATH
-  remote: ~/gems/active_pubsub
-  specs:
-    active_pubsub (0.0.2)
-      active_attr
-      bunny
-      celluloid (~> 0.15.2)
-      json
-
 GEM
   remote: https://rubygems.org/
   specs:
@@ -22,6 +13,11 @@ GEM
     active_attr (0.8.4)
       activemodel (>= 3.0.2, < 4.2)
       activesupport (>= 3.0.2, < 4.2)
+    active_pubsub (0.0.2)
+      active_attr
+      bunny
+      celluloid-io
+      json
     activemodel (4.0.1)
       activesupport (= 4.0.1)
       builder (~> 3.1.0)
@@ -44,6 +40,9 @@ GEM
       amq-protocol (>= 1.9.2)
     celluloid (0.15.2)
       timers (~> 1.1.0)
+    celluloid-io (0.15.0)
+      celluloid (>= 0.15.0)
+      nio4r (>= 0.5.0)
     coderay (1.1.0)
     coffee-rails (4.0.1)
       coffee-script (>= 2.2.0)
@@ -71,6 +70,7 @@ GEM
     mime-types (1.25.1)
     minitest (4.7.5)
     multi_json (1.10.1)
+    nio4r (1.0.1)
     polyglot (0.3.5)
     pry (0.10.1)
       coderay (~> 1.1.0)
@@ -142,7 +142,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  active_pubsub!
+  active_pubsub
   coffee-rails (~> 4.0.0)
   jbuilder (~> 1.2)
   jquery-rails
