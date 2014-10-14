@@ -24,7 +24,7 @@ Customer.create(:name => "Tom Sykowski")
 puts "Making sales"
 customers = Customer.all.to_a
 products = Product.all.to_a
-10000.times do |i|
+1000000.times do |i|
   product = products[rand(products.size - 1)]
   customer = customers[rand(customers.size - 1)]
 
