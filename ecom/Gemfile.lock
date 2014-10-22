@@ -13,10 +13,10 @@ GEM
     active_attr (0.8.4)
       activemodel (>= 3.0.2, < 4.2)
       activesupport (>= 3.0.2, < 4.2)
-    active_pubsub (0.0.1)
+    active_pubsub (0.0.7)
       active_attr
       bunny
-      celluloid-io
+      celluloid
       json
     activemodel (4.0.1)
       activesupport (= 4.0.1)
@@ -40,9 +40,6 @@ GEM
       amq-protocol (>= 1.9.2)
     celluloid (0.16.0)
       timers (~> 4.0.0)
-    celluloid-io (0.16.1)
-      celluloid (>= 0.16.0)
-      nio4r (>= 1.0.0)
     coderay (1.1.0)
     coffee-rails (4.0.1)
       coffee-script (>= 2.2.0)
@@ -70,7 +67,6 @@ GEM
     mime-types (1.25.1)
     minitest (4.7.5)
     multi_json (1.10.1)
-    nio4r (1.0.1)
     polyglot (0.3.5)
     pry (0.10.1)
       coderay (~> 1.1.0)

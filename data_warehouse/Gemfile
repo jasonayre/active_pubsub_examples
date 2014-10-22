@@ -32,7 +32,6 @@ group :doc do
   gem 'sdoc', require: false
 end
 
-# gem 'active_pubsub'
 gem 'sidekiq'
 gem 'active_pubsub'
 # gem 'active_pubsub', :path => "~/gems/active_pubsub"

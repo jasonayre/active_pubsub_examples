@@ -1,4 +1,5 @@
 class SaleSubscriber < ::ActivePubsub::Subscriber
+
   class_attribute :message_count
   self.message_count = 0
   #the exchange you are observing, i.e. service_name.resource_type
@@ -25,7 +26,7 @@ class SaleSubscriber < ::ActivePubsub::Subscriber
     self.class.message_count += 1
 
     current_sales_report.total_sales ||= 0
-    current_sales_report.total_sales += record["price"]
+    current_sales_report.total_sales += record[:price]
     current_sales_report.save
 
     puts "Total Sales After Update: #{current_sales_report.total_sales}"
@@ -35,10 +36,10 @@ class SaleSubscriber < ::ActivePubsub::Subscriber
   #for example if we refunded our customers by destroying sales receipts records
   #which would of course be an excellent business practice
   on :destroyed do |destroyed_record|
-    sales_report = ::ProductSalesReport.find_by(:product_id => destroyed_record["product_id"])
+    sales_report = ::ProductSalesReport.find_by(:product_id => destroyed_record[:product_id])
 
     if(sales_report)
-      sales_report.total_sales -= destroyed_record["price"]
+      sales_report.total_sales -= destroyed_record[:price]
       sales_report.save
     end
 
@@ -47,12 +48,12 @@ class SaleSubscriber < ::ActivePubsub::Subscriber
 
   # including active model dirty and including changed attributes in serialization
   # so you can see what attributes have changed.
-  on :updated do |record|
-    sales_report = ::ProductSalesReport.find_by(:product_id => record["product_id"])
+  on :updated do |updated_record|
+    sales_report = ::ProductSalesReport.find_by(:product_id => updated_record["product_id"])
 
     if(sales_report)
-      price_change = record["changes"]["price"][0] - record["changes"]["price"][1]
-      sales_report.total_sales += record["price"]
+      price_change = updated_record[:changes]["price"][0] - updated_record[:changes]["price"][1]
+      sales_report.total_sales += updated_record[:price]
       sales_report.save
     end
 
@@ -60,7 +61,7 @@ class SaleSubscriber < ::ActivePubsub::Subscriber
   end
 
   def current_sales_report
-    @current_sales_report ||= ::ProductSalesReport.where(:product_id => record["product_id"]).first_or_create
+    @current_sales_report ||= ::ProductSalesReport.where(:product_id => record[:product_id]).first_or_create
   end
 
 end
