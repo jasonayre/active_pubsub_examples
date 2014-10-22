@@ -1,4 +1,8 @@
 class SaleSubscriber < ::ActivePubsub::Subscriber
+  #optional, include SubscribeToChanges module for individual attribute observation
+  #via on_change(attribute_name)
+  #note, if you include this, dont defin updated event as on_change uses that event
+  include ::ActivePubsub::SubscribeToChanges
 
   class_attribute :message_count
   self.message_count = 0
@@ -46,19 +50,30 @@ class SaleSubscriber < ::ActivePubsub::Subscriber
     puts "Total Sales After Destroy: #{sales_report.total_sales}"
   end
 
-  # including active model dirty and including changed attributes in serialization
-  # so you can see what attributes have changed.
-  on :updated do |updated_record|
-    sales_report = ::ProductSalesReport.find_by(:product_id => updated_record["product_id"])
+  #brought to you by including ::ActivePubsub::SubscribeToChanges
+  #can watch as many attributes as you want with separate on_change calls
+  #new value and old_value are optional, you still have record via record method
+  on_change :price do |new_value, old_value|
+    price_change = old_value - new_value
+    current_sales_report.total_sales -= price_change
+    current_sales_report.save
 
-    if(sales_report)
-      price_change = updated_record[:changes]["price"][0] - updated_record[:changes]["price"][1]
-      sales_report.total_sales += updated_record[:price]
-      sales_report.save
-    end
-
-    puts "Total Sales After Update: #{sales_report.total_sales}"
+    puts "Total Sales After Update: #{current_sales_report.total_sales}"
   end
+
+  #below is an example of using update method without the on_change
+  #make sure to only use on_change methods, or one on :updated call
+  # on :updated do |updated_record|
+  #   sales_report = ::ProductSalesReport.find_by(:product_id => updated_record["product_id"])
+  #
+  #   if(sales_report)
+  #     price_change = updated_record[:changes]["price"][0] - updated_record[:changes]["price"][1]
+  #     sales_report.total_sales += updated_record[:price]
+  #     sales_report.save
+  #   end
+  #
+  #   puts "Total Sales After Update: #{sales_report.total_sales}"
+  # end
 
   def current_sales_report
     @current_sales_report ||= ::ProductSalesReport.where(:product_id => record[:product_id]).first_or_create
